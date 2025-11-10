@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circuit #19 - Back Patio Lights</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        .nav-links {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .nav-links a {
+            display: inline-block;
+            background: #252525;
+            color: #4ade80;
+            padding: 0.6rem 1.2rem;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 0 0.5rem;
+            border: 1px solid #333;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            background: #333;
+            border-color: #4ade80;
+        }
+
+        .toggle-container {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 8px;
+        }
+
+        .toggle-btn {
+            background: #252525;
+            color: #e0e0e0;
+            border: 2px solid #444;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .toggle-btn:hover {
+            background: #333;
+            border-color: #ffd700;
+        }
+
+        .toggle-btn.active {
+            background: #ffd700;
+            color: #0a0a0a;
+            border-color: #ffd700;
+        }
+
+        .schematic-container {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 12px;
+            padding: 3rem;
+            position: relative;
+            min-height: 600px;
+        }
+
+        #schematic-svg {
+            width: 100%;
+            height: 600px;
+        }
+
+        .component {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .component:hover {
+            filter: brightness(1.3);
+        }
+
+        .component.active {
+            filter: brightness(1.5) drop-shadow(0 0 10px #ffd700);
+        }
+
+        .wire {
+            stroke-width: 3;
+            fill: none;
+            transition: all 0.3s ease;
+        }
+
+        .wire.active {
+            stroke-width: 5;
+            filter: drop-shadow(0 0 8px currentColor);
+        }
+
+        .label {
+            font-size: 14px;
+            fill: #e0e0e0;
+            pointer-events: none;
+        }
+
+        .label-bold {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .comparison-note {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #1a2d2d;
+            border-left: 4px solid #4ade80;
+            border-radius: 8px;
+        }
+
+        .comparison-note h3 {
+            color: #4ade80;
+            margin-bottom: 1rem;
+        }
+
+        .info-panel {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #252525;
+            border: 2px solid #444;
+            border-radius: 8px;
+            padding: 1.5rem;
+            width: 320px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .info-panel h3 {
+            color: #ffd700;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .info-panel p {
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+            color: #ccc;
+        }
+
+        .info-panel .spec {
+            background: #1a1a1a;
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #4ade80;
+        }
+
+        .info-panel .warning {
+            background: #2d1a1a;
+            border-left: 3px solid #ff4444;
+            padding: 0.8rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .info-panel .note {
+            background: #1a2d2d;
+            border-left: 3px solid #4ade80;
+            padding: 0.8rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #333;
+            border: 1px solid #555;
+            color: #e0e0e0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #444;
+            border-color: #ffd700;
+        }
+
+        .close-btn.visible {
+            display: flex;
+        }
+
+        .legend {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #252525;
+            border-radius: 8px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .legend-color {
+            width: 40px;
+            height: 4px;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 1200px) {
+            .info-panel {
+                position: static;
+                transform: none;
+                margin-top: 2rem;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Circuit #19: Back Patio Lights</h1>
+            <p class="subtitle">15A, 120V Lighting Circuit - Current vs. Proposed</p>
+        </header>
+
+        <div class="nav-links">
+            <a href="index.html">← Home</a>
+            <a href="service-entrance-schematic.html">← Service Entrance</a>
+        </div>
+
+        <div class="toggle-container">
+            <button class="toggle-btn active" id="currentBtn" onclick="showCurrent()">Current Setup</button>
+            <button class="toggle-btn" id="proposedBtn" onclick="showProposed()">Proposed Automation</button>
+        </div>
+
+        <div class="schematic-container">
+            <svg id="schematic-svg" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+                <!-- Main Panel -->
+                <g id="panel" class="component" data-info="panel">
+                    <rect x="50" y="200" width="120" height="180" fill="#555" stroke="#888" stroke-width="3" rx="8"/>
+                    <rect x="65" y="220" width="90" height="25" fill="#333" stroke="#666" stroke-width="2" rx="4"/>
+                    <text x="110" y="237" class="label" text-anchor="middle" style="font-size: 12px; font-weight: 600;">MAIN 200A</text>
+                    
+                    <!-- Breaker #19 -->
+                    <rect x="65" y="280" width="90" height="30" fill="#222" stroke="#ffd700" stroke-width="2" rx="3"/>
+                    <text x="110" y="300" class="label label-bold" text-anchor="middle" fill="#ffd700">#19 - 15A</text>
+                    
+                    <text x="110" y="410" class="label label-bold" text-anchor="middle">Main Panel</text>
+                </g>
+
+                <!-- Hot wire from breaker -->
+                <line id="wire-hot-to-switch" x1="170" y1="295" x2="400" y2="295" class="wire" stroke="#000" stroke-width="4"/>
+                <text x="280" y="285" class="label" style="font-size: 12px;">Hot (Black 14AWG)</text>
+
+                <!-- Current: Manual Toggle Switch -->
+                <g id="manual-switch" class="component current-only" data-info="manual-switch">
+                    <rect x="380" y="250" width="80" height="100" fill="#666" stroke="#888" stroke-width="2" rx="6"/>
+                    <rect x="405" y="275" width="30" height="40" fill="#f0f0f0" stroke="#333" stroke-width="2" rx="3"/>
+                    <line x1="420" y1="280" x2="420" y2="305" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="420" cy="305" r="4" fill="#333"/>
+                    <text x="420" y="370" class="label label-bold" text-anchor="middle">Manual</text>
+                    <text x="420" y="385" class="label" text-anchor="middle" style="font-size: 11px;">Toggle</text>
+                </g>
+
+                <!-- Proposed: Smart Switch -->
+                <g id="smart-switch" class="component proposed-only" data-info="smart-switch" style="display: none;">
+                    <rect x="380" y="250" width="80" height="100" fill="#333" stroke="#4ade80" stroke-width="3" rx="6"/>
+                    <rect x="395" y="270" width="50" height="60" fill="#1a1a1a" stroke="#4ade80" stroke-width="1" rx="3"/>
+                    <circle cx="420" cy="290" r="8" fill="#4ade80" opacity="0.3"/>
+                    <circle cx="420" cy="310" r="3" fill="#4ade80"/>
+                    <path d="M 410 300 Q 420 295, 430 300" stroke="#4ade80" stroke-width="1.5" fill="none"/>
+                    <text x="420" y="370" class="label label-bold" text-anchor="middle" fill="#4ade80">Smart</text>
+                    <text x="420" y="385" class="label" text-anchor="middle" style="font-size: 11px;" fill="#4ade80">Switch</text>
+                </g>
+
+                <!-- Hot wire from switch to lights -->
+                <line id="wire-switch-to-lights" x1="460" y1="295" x2="650" y2="295" class="wire" stroke="#000" stroke-width="4"/>
+                <text x="555" y="285" class="label" style="font-size: 12px;">Switched Hot</text>
+
+                <!-- Patio Lights -->
+                <g id="lights" class="component" data-info="lights">
+                    <circle cx="720" cy="295" r="40" fill="#333" stroke="#888" stroke-width="3"/>
+                    <path d="M 720 270 L 710 290 L 720 285 L 730 290 Z" fill="#ffd700" stroke="#ffa500" stroke-width="2"/>
+                    <circle cx="720" cy="295" r="25" fill="none" stroke="#ffd700" stroke-width="2" opacity="0.5"/>
+                    <text x="720" y="360" class="label label-bold" text-anchor="middle">Back Patio</text>
+                    <text x="720" y="375" class="label" text-anchor="middle" style="font-size: 11px;">Lights</text>
+                </g>
+
+                <!-- Neutral return -->
+                <path d="M 720 335 L 720 450 L 110 450 L 110 380" class="wire" stroke="#aaa" stroke-width="4" fill="none" id="wire-neutral"/>
+                <text x="400" y="470" class="label" text-anchor="middle" style="font-size: 12px;">Neutral (White 14AWG)</text>
+
+                <!-- Ground wire -->
+                <path d="M 460 350 L 460 410 L 720 410 L 720 335" class="wire" stroke="#4ade80" stroke-width="3" fill="none" id="wire-ground"/>
+                <line x1="455" y1="410" x2="465" y2="410" stroke="#4ade80" stroke-width="4"/>
+                <line x1="457" y1="415" x2="463" y2="415" stroke="#4ade80" stroke-width="3"/>
+                <line x1="459" y1="420" x2="461" y2="420" stroke="#4ade80" stroke-width="2"/>
+                <text x="590" y="425" class="label" style="font-size: 12px;" fill="#4ade80">Ground (Bare/Green)</text>
+
+                <!-- WiFi symbol (only for proposed) -->
+                <g id="wifi-symbol" class="proposed-only" style="display: none;">
+                    <path d="M 420 200 Q 420 180, 440 180 Q 460 180, 460 200" stroke="#4ade80" stroke-width="2" fill="none" opacity="0.6"/>
+                    <path d="M 425 205 Q 425 195, 435 195 Q 445 195, 445 205" stroke="#4ade80" stroke-width="2" fill="none" opacity="0.8"/>
+                    <circle cx="435" cy="210" r="2" fill="#4ade80"/>
+                    <text x="435" y="170" class="label" text-anchor="middle" fill="#4ade80" style="font-size: 11px;">WiFi Control</text>
+                </g>
+
+                <!-- Current flow arrows -->
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                        <polygon points="0 0, 10 3, 0 6" fill="#ffd700" />
+                    </marker>
+                </defs>
+                
+                <!-- Voltage label -->
+                <text x="900" y="250" class="label" style="font-size: 14px; font-weight: 600;">Circuit Specs:</text>
+                <text x="900" y="280" class="label" style="font-size: 13px;">
+                    <tspan x="900" dy="0">• Voltage: 120V</tspan>
+                    <tspan x="900" dy="20">• Breaker: 15A</tspan>
+                    <tspan x="900" dy="20">• Wire: 14 AWG</tspan>
+                    <tspan x="900" dy="20">• Type: Lighting</tspan>
+                </text>
+            </svg>
+        </div>
+
+        <div class="comparison-note" id="comparison-note">
+            <h3>Current Setup</h3>
+            <p>Standard manual toggle switch controls the patio lights. Simple on/off operation - requires physical interaction to control lighting.</p>
+            <p><strong>Limitations:</strong> No scheduling, no remote control, no automation based on time or conditions.</p>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: #000;"></div>
+                <span>Hot (Black) - 120V</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #aaa;"></div>
+                <span>Neutral (White)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #4ade80;"></div>
+                <span>Ground (Bare/Green)</span>
+            </div>
+        </div>
+
+        <div class="info-panel" id="info-panel">
+            <button class="close-btn" id="close-btn" title="Reset">×</button>
+            <h3>Click any component to learn more</h3>
+            <p>This schematic shows Circuit #19 - the back patio lighting circuit.</p>
+            <div class="note">
+                <strong>Interactive:</strong> Toggle between current and proposed setups, then click components for detailed information.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const defaultContent = `
+            <h3>Click any component to learn more</h3>
+            <p>This schematic shows Circuit #19 - the back patio lighting circuit.</p>
+            <div class="note">
+                <strong>Interactive:</strong> Toggle between current and proposed setups, then click components for detailed information.
+            </div>
+        `;
+
+        const infoContent = {
+            panel: {
+                title: "Main Panel - Breaker #19",
+                content: `
+                    <p>Circuit #19 originates from this 15A single-pole breaker in the main service panel.</p>
+                    <div class="spec">
+                        Breaker: 15 Amperes<br>
+                        Voltage: 120V (Hot to Neutral)<br>
+                        Wire: 14 AWG copper<br>
+                        Load: Back Patio & Kitchen Lights
+                    </div>
+                    <p><strong>Protection:</strong> The 15A breaker protects the 14 AWG wire from overcurrent. If load exceeds 15A, the breaker trips to prevent wire overheating.</p>
+                    <div class="note">
+                        <strong>NEC Compliance:</strong> 14 AWG wire is rated for maximum 15A. This circuit is properly matched for safety.
+                    </div>
+                `
+            },
+            'manual-switch': {
+                title: "Manual Toggle Switch",
+                content: `
+                    <p>Standard single-pole toggle switch - the current control method for the patio lights.</p>
+                    <div class="spec">
+                        Type: SPST (Single-Pole Single-Throw)<br>
+                        Rating: 15A, 120V<br>
+                        Location: 4-gang switch plate<br>
+                        Position: Far right switch
+                    </div>
+                    <p><strong>How it works:</strong> The switch interrupts the hot wire. When closed (ON), current flows through to the lights. When open (OFF), the circuit is broken and lights are off.</p>
+                    <div class="warning">
+                        <strong>Safety Note:</strong> Always interrupt the HOT wire, never the neutral. This ensures the fixture is de-energized when the switch is off.
+                    </div>
+                `
+            },
+            'smart-switch': {
+                title: "Smart Switch (Proposed)",
+                content: `
+                    <p>WiFi-enabled smart switch that replaces the manual toggle while maintaining the same electrical function.</p>
+                    <div class="spec">
+                        Type: Smart WiFi Switch<br>
+                        Rating: 15A, 120V<br>
+                        Neutral: Required for most models<br>
+                        Control: Physical + App + Voice + Schedule
+                    </div>
+                    <p><strong>Capabilities:</strong></p>
+                    <ul style="margin-left: 1.5rem; line-height: 1.8;">
+                        <li>Manual on/off (physical button)</li>
+                        <li>Remote control via smartphone</li>
+                        <li>Scheduling (sunset/sunrise triggers)</li>
+                        <li>Voice control (Alexa/Google)</li>
+                        <li>Integration with home automation</li>
+                    </ul>
+                    <div class="note">
+                        <strong>Installation:</strong> Direct replacement for existing switch. Requires neutral wire connection (usually available in modern switch boxes).
+                    </div>
+                `
+            },
+            lights: {
+                title: "Back Patio Lights",
+                content: `
+                    <p>The load on Circuit #19 - outdoor lighting fixtures on the back patio and kitchen area.</p>
+                    <div class="spec">
+                        Circuit: #19<br>
+                        Voltage: 120V<br>
+                        Control: Single switch<br>
+                        Location: Back patio & kitchen exterior
+                    </div>
+                    <p><strong>Load Calculation:</strong> Important to verify total wattage doesn't exceed circuit capacity.</p>
+                    <div class="note">
+                        <strong>Safety Margin:</strong> For continuous loads (3+ hours), NEC requires loads to not exceed 80% of breaker rating. For 15A circuit: max 12A continuous (1,440W at 120V).
+                    </div>
+                    <p>LED fixtures typically use 10-20W each, so this circuit can easily handle multiple fixtures with plenty of safety margin.</p>
+                `
+            }
+        };
+
+        let currentView = 'current';
+
+        function showCurrent() {
+            currentView = 'current';
+            document.getElementById('currentBtn').classList.add('active');
+            document.getElementById('proposedBtn').classList.remove('active');
+            
+            document.querySelectorAll('.current-only').forEach(el => el.style.display = '');
+            document.querySelectorAll('.proposed-only').forEach(el => el.style.display = 'none');
+            
+            document.getElementById('comparison-note').innerHTML = `
+                <h3>Current Setup</h3>
+                <p>Standard manual toggle switch controls the patio lights. Simple on/off operation - requires physical interaction to control lighting.</p>
+                <p><strong>Limitations:</strong> No scheduling, no remote control, no automation based on time or conditions.</p>
+            `;
+        }
+
+        function showProposed() {
+            currentView = 'proposed';
+            document.getElementById('proposedBtn').classList.add('active');
+            document.getElementById('currentBtn').classList.remove('active');
+            
+            document.querySelectorAll('.current-only').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.proposed-only').forEach(el => el.style.display = '');
+            
+            document.getElementById('comparison-note').innerHTML = `
+                <h3>Proposed Smart Automation</h3>
+                <p>WiFi-enabled smart switch replaces the manual toggle. Maintains all physical switch functionality while adding modern control options.</p>
+                <p><strong>Benefits:</strong></p>
+                <ul style="margin-left: 1.5rem; line-height: 1.8; margin-top: 0.5rem;">
+                    <li>Schedule lights to turn on/off automatically (sunset/sunrise)</li>
+                    <li>Remote control from anywhere via smartphone app</li>
+                    <li>Voice control integration (Alexa, Google Home)</li>
+                    <li>Energy monitoring (some models)</li>
+                    <li>Manual override always available</li>
+                </ul>
+                <p><strong>No electrical changes required</strong> - same circuit, same wiring, same breaker. Only the switch device is replaced.</p>
+            `;
+        }
+
+        // Component click handlers
+        const panel = document.getElementById('info-panel');
+        const closeBtn = document.getElementById('close-btn');
+
+        document.querySelectorAll('.component').forEach(component => {
+            component.addEventListener('click', function() {
+                const infoKey = this.getAttribute('data-info');
+                if (infoKey && infoContent[infoKey]) {
+                    const info = infoContent[infoKey];
+                    panel.innerHTML = `<button class="close-btn visible" id="close-btn" title="Reset">×</button><h3>${info.title}</h3>${info.content}`;
+                    
+                    document.getElementById('close-btn').addEventListener('click', resetPanel);
+                    
+                    document.querySelectorAll('.component').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        function resetPanel() {
+            panel.innerHTML = defaultContent;
+            document.querySelectorAll('.component').forEach(c => c.classList.remove('active'));
+        }
+
+        closeBtn.addEventListener('click', resetPanel);
+
+        // Wire hover effects
+        const wires = ['wire-hot-to-switch', 'wire-switch-to-lights', 'wire-neutral', 'wire-ground'];
+        wires.forEach(wireId => {
+            const wire = document.getElementById(wireId);
+            if (wire) {
+                wire.addEventListener('mouseenter', () => wire.classList.add('active'));
+                wire.addEventListener('mouseleave', () => wire.classList.remove('active'));
+            }
+        });
+    </script>
+</body>
+</html>
