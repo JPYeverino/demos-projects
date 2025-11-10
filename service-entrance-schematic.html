@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Entrance Schematic - City to House</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        .schematic-container {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 12px;
+            padding: 3rem;
+            position: relative;
+            min-height: 800px;
+        }
+
+        /* SVG Container */
+        #schematic-svg {
+            width: 100%;
+            height: 700px;
+        }
+
+        /* Component styles */
+        .component {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .component:hover {
+            filter: brightness(1.3);
+        }
+
+        .component.active {
+            filter: brightness(1.5) drop-shadow(0 0 10px #ffd700);
+        }
+
+        .wire {
+            stroke-width: 3;
+            fill: none;
+            transition: all 0.3s ease;
+        }
+
+        .wire.active {
+            stroke-width: 5;
+            filter: drop-shadow(0 0 8px currentColor);
+        }
+
+        .label {
+            font-size: 14px;
+            fill: #e0e0e0;
+            pointer-events: none;
+        }
+
+        .label-bold {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* Info panel */
+        .info-panel {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #252525;
+            border: 2px solid #444;
+            border-radius: 8px;
+            padding: 1.5rem;
+            width: 320px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .info-panel h3 {
+            color: #ffd700;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #333;
+            border: 1px solid #555;
+            color: #e0e0e0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #444;
+            border-color: #ffd700;
+        }
+
+        .close-btn.visible {
+            display: flex;
+        }
+
+        .info-panel p {
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+            color: #ccc;
+        }
+
+        .info-panel .spec {
+            background: #1a1a1a;
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #4ade80;
+        }
+
+        .info-panel .warning {
+            background: #2d1a1a;
+            border-left: 3px solid #ff4444;
+            padding: 0.8rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .info-panel .note {
+            background: #1a2d2d;
+            border-left: 3px solid #4ade80;
+            padding: 0.8rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        /* Legend */
+        .legend {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #252525;
+            border-radius: 8px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .legend-color {
+            width: 40px;
+            height: 4px;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 1200px) {
+            .info-panel {
+                position: static;
+                transform: none;
+                margin-top: 2rem;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Electrical Service Entrance</h1>
+            <p class="subtitle">From Utility Pole to Main Panel - 200A Service</p>
+        </header>
+
+        <div class="schematic-container">
+            <svg id="schematic-svg" viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg">
+                <!-- Utility Pole -->
+                <g id="pole" class="component" data-info="pole">
+                    <rect x="50" y="100" width="30" height="300" fill="#8B4513" stroke="#654321" stroke-width="2"/>
+                    <circle cx="65" cy="120" r="25" fill="#444" stroke="#666" stroke-width="2"/>
+                    <text x="65" y="50" class="label label-bold" text-anchor="middle">Utility Pole</text>
+                    <text x="65" y="70" class="label" text-anchor="middle">w/ Transformer</text>
+                </g>
+
+                <!-- Overhead Service Drop Wires -->
+                <g id="service-drop">
+                    <!-- Hot 1 (Black) -->
+                    <path id="wire-hot1" class="wire" d="M 80 120 Q 250 180, 400 140" 
+                          stroke="#000" stroke-dasharray="0"/>
+                    
+                    <!-- Hot 2 (Red) -->
+                    <path id="wire-hot2" class="wire" d="M 80 130 Q 250 190, 400 150" 
+                          stroke="#ff0000" stroke-dasharray="0"/>
+                    
+                    <!-- Neutral (White/Gray) -->
+                    <path id="wire-neutral" class="wire" d="M 80 140 Q 250 200, 400 160" 
+                          stroke="#aaa" stroke-dasharray="0"/>
+                    
+                    <text x="230" y="160" class="label" text-anchor="middle">Overhead Service Drop</text>
+                    <text x="230" y="180" class="label" text-anchor="middle" style="font-size: 12px;">(Triplex Cable)</text>
+                </g>
+
+                <!-- Weather Head -->
+                <g id="weather-head" class="component" data-info="weatherhead">
+                    <rect x="380" y="120" width="40" height="60" fill="#555" stroke="#777" stroke-width="2" rx="5"/>
+                    <path d="M 400 120 Q 400 100, 420 100" stroke="#777" stroke-width="3" fill="none"/>
+                    <text x="400" y="105" class="label" text-anchor="middle">Weather</text>
+                    <text x="400" y="215" class="label" text-anchor="middle">Head</text>
+                </g>
+
+                <!-- Conduit down wall -->
+                <g id="conduit">
+                    <rect x="395" y="180" width="10" height="200" fill="#888" stroke="#666" stroke-width="1"/>
+                    <text x="440" y="280" class="label">Conduit</text>
+                </g>
+
+                <!-- Meter Socket -->
+                <g id="meter" class="component" data-info="meter">
+                    <rect x="360" y="390" width="80" height="100" fill="#666" stroke="#888" stroke-width="2" rx="8"/>
+                    <circle cx="400" cy="440" r="30" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="400" y="445" class="label" text-anchor="middle" fill="#000" style="font-size: 12px;">kWh</text>
+                    <text x="400" y="520" class="label label-bold" text-anchor="middle">Electric Meter</text>
+                    <text x="400" y="540" class="label" text-anchor="middle" style="font-size: 12px;">(Utility Owned)</text>
+                </g>
+
+                <!-- Wires from meter to panel -->
+                <g id="meter-to-panel">
+                    <line x1="400" y1="490" x2="400" y2="550" class="wire" stroke="#000" id="wire-meter-hot1"/>
+                    <line x1="410" y1="490" x2="410" y2="550" class="wire" stroke="#ff0000" id="wire-meter-hot2"/>
+                    <line x1="390" y1="490" x2="390" y2="550" class="wire" stroke="#aaa" id="wire-meter-neutral"/>
+                </g>
+
+                <!-- Main Service Panel -->
+                <g id="main-panel" class="component" data-info="panel">
+                    <rect x="320" y="550" width="160" height="120" fill="#555" stroke="#888" stroke-width="3" rx="8"/>
+                    
+                    <!-- Main Breaker -->
+                    <rect x="335" y="565" width="130" height="30" fill="#333" stroke="#666" stroke-width="2" rx="4"/>
+                    <text x="400" y="585" class="label" text-anchor="middle" style="font-size: 13px; font-weight: 600;">MAIN 200A</text>
+                    
+                    <!-- Branch Breakers -->
+                    <rect x="335" y="605" width="60" height="15" fill="#222" stroke="#666" stroke-width="1" rx="2"/>
+                    <rect x="405" y="605" width="60" height="15" fill="#222" stroke="#666" stroke-width="1" rx="2"/>
+                    <rect x="335" y="625" width="60" height="15" fill="#222" stroke="#666" stroke-width="1" rx="2"/>
+                    <rect x="405" y="625" width="60" height="15" fill="#222" stroke="#666" stroke-width="1" rx="2"/>
+                    <rect x="335" y="645" width="60" height="15" fill="#222" stroke="#666" stroke-width="1" rx="2"/>
+                    <rect x="405" y="645" width="60" height="15" fill="#222" stroke="#666" stroke-width="1" rx="2"/>
+                    
+                    <text x="400" y="695" class="label label-bold" text-anchor="middle">Main Service Panel</text>
+                    <text x="400" y="710" class="label" text-anchor="middle" style="font-size: 11px;">Square D Q22200NRB</text>
+                </g>
+
+                <!-- Ground wire and rod -->
+                <g id="grounding" class="component" data-info="ground">
+                    <line x1="480" y1="610" x2="550" y2="610" class="wire" stroke="#4ade80" stroke-width="3"/>
+                    <line x1="550" y1="610" x2="550" y2="680" class="wire" stroke="#4ade80" stroke-width="3"/>
+                    <line x1="545" y1="680" x2="555" y2="680" stroke="#4ade80" stroke-width="4"/>
+                    <line x1="547" y1="685" x2="553" y2="685" stroke="#4ade80" stroke-width="3"/>
+                    <line x1="549" y1="690" x2="551" y2="690" stroke="#4ade80" stroke-width="2"/>
+                    <text x="580" y="650" class="label">Ground</text>
+                    <text x="580" y="665" class="label" style="font-size: 11px;">Rod</text>
+                </g>
+
+                <!-- House representation -->
+                <g id="house">
+                    <path d="M 700 400 L 850 400 L 850 650 L 700 650 Z" fill="#2a2a2a" stroke="#444" stroke-width="2"/>
+                    <path d="M 680 400 L 775 320 L 870 400 Z" fill="#1a1a1a" stroke="#444" stroke-width="2"/>
+                    <rect x="730" y="570" width="40" height="60" fill="#555" stroke="#666" stroke-width="1"/>
+                    <rect x="790" y="570" width="40" height="60" fill="#555" stroke="#666" stroke-width="1"/>
+                    <text x="775" y="690" class="label label-bold" text-anchor="middle">House</text>
+                    <text x="775" y="708" class="label" text-anchor="middle" style="font-size: 11px;">Single Story</text>
+                </g>
+
+                <!-- Arrow showing flow -->
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                        <polygon points="0 0, 10 3, 0 6" fill="#ffd700" />
+                    </marker>
+                </defs>
+                <path d="M 120 450 L 320 450" stroke="#ffd700" stroke-width="2" fill="none" 
+                      marker-end="url(#arrowhead)" stroke-dasharray="5,5">
+                    <animate attributeName="stroke-dashoffset" from="0" to="10" dur="1s" repeatCount="indefinite"/>
+                </path>
+                <text x="220" y="440" class="label" text-anchor="middle" fill="#ffd700">Power Flow</text>
+
+                <!-- Voltage labels -->
+                <text x="900" y="450" class="label" style="font-size: 13px;">
+                    <tspan x="900" dy="0">Voltage:</tspan>
+                    <tspan x="900" dy="20">• Hot 1 to Neutral: 120V</tspan>
+                    <tspan x="900" dy="20">• Hot 2 to Neutral: 120V</tspan>
+                    <tspan x="900" dy="20">• Hot 1 to Hot 2: 240V</tspan>
+                </text>
+            </svg>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: #000;"></div>
+                <span>Hot 1 (Black) - 120V</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ff0000;"></div>
+                <span>Hot 2 (Red) - 120V</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #aaa;"></div>
+                <span>Neutral (White/Gray)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #4ade80;"></div>
+                <span>Ground (Green/Bare)</span>
+            </div>
+        </div>
+
+        <div class="info-panel" id="info-panel">
+            <button class="close-btn" id="close-btn" title="Reset">×</button>
+            <h3>Click any component to learn more</h3>
+            <p>This schematic shows the complete electrical service from the utility company to your main panel.</p>
+            <div class="note">
+                <strong>Interactive:</strong> Click on different parts of the system to see detailed specifications and explanations.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const defaultContent = `
+            <h3>Click any component to learn more</h3>
+            <p>This schematic shows the complete electrical service from the utility company to your main panel.</p>
+            <div class="note">
+                <strong>Interactive:</strong> Click on different parts of the system to see detailed specifications and explanations.
+            </div>
+        `;
+
+        const infoContent = {
+            pole: {
+                title: "Utility Pole & Transformer",
+                content: `
+                    <p>The utility company's infrastructure that steps down high-voltage transmission power to usable residential voltage.</p>
+                    <div class="spec">
+                        Transformer: 7200V → 240V/120V<br>
+                        Configuration: Split-phase
+                    </div>
+                    <p><strong>How it works:</strong> The transformer on the pole converts high-voltage power from the grid (typically 7,200V) down to the 240V/120V split-phase system used in homes.</p>
+                    <p>The utility company owns and maintains everything up to and including the meter.</p>
+                `
+            },
+            weatherhead: {
+                title: "Weather Head (Service Entrance)",
+                content: `
+                    <p>The point where overhead service wires enter the building's conduit system. The curved design prevents water from entering the conduit.</p>
+                    <div class="spec">
+                        Type: Weatherproof entrance cap<br>
+                        Wire entry: Downward-facing<br>
+                        Protection: Rain, snow, debris
+                    </div>
+                    <div class="note">
+                        <strong>Code Requirement:</strong> Must be installed with wires entering from below to prevent water infiltration. The weather head must be the highest point of the service mast.
+                    </div>
+                    <p>Three wires enter: two "hot" conductors (black and red) and one neutral conductor (white/gray).</p>
+                `
+            },
+            meter: {
+                title: "Electric Meter",
+                content: `
+                    <p>Measures electrical consumption in kilowatt-hours (kWh) for billing purposes.</p>
+                    <div class="spec">
+                        Owner: Utility Company<br>
+                        Type: Digital or mechanical<br>
+                        Socket: NEMA/ANSI standard<br>
+                        Sealed: Tamper-evident
+                    </div>
+                    <div class="warning">
+                        <strong>⚠ Never touch or modify:</strong> The meter and its socket are property of the utility company. Tampering is illegal and extremely dangerous.
+                    </div>
+                    <p>The meter monitors power flowing through it without interrupting service. All power consumed in the house passes through this meter.</p>
+                `
+            },
+            panel: {
+                title: "Main Service Panel (200A)",
+                content: `
+                    <p>Your girlfriend's actual panel: Square D Q22200NRB</p>
+                    <div class="spec">
+                        Model: Square D Q22200NRB<br>
+                        Main Breaker: 200 Amperes<br>
+                        Voltage: 120/240V AC<br>
+                        Type: Split-phase residential<br>
+                        Enclosure: Type 3R (rainproof)<br>
+                        Spaces: 40 circuits (typical)
+                    </div>
+                    <p><strong>Main breaker function:</strong> Protects the entire electrical system from overcurrent. If total load exceeds 200A, it trips to prevent wire overheating and fire.</p>
+                    <p><strong>Branch breakers:</strong> Individual breakers protect each circuit (lighting, outlets, appliances). They're sized based on wire gauge and expected load.</p>
+                    <div class="note">
+                        <strong>Key Point:</strong> This is where you'll add the smart switch for outdoor lighting automation. It connects to one of the branch circuit breakers.
+                    </div>
+                `
+            },
+            ground: {
+                title: "Grounding System",
+                content: `
+                    <p>Critical safety system that provides a path for fault current to flow safely into the earth.</p>
+                    <div class="spec">
+                        Ground Rod: 8ft copper or copper-clad<br>
+                        Wire: #4 AWG copper (minimum)<br>
+                        Connection: Exothermic weld or clamp<br>
+                        Depth: Minimum 8 feet into earth
+                    </div>
+                    <p><strong>Why it matters:</strong> If a hot wire touches a metal enclosure, the ground provides a low-resistance path back to the panel. This causes high current flow, tripping the breaker immediately.</p>
+                    <p>Without proper grounding, that metal enclosure would be energized at 120V, waiting to shock anyone who touches it.</p>
+                    <div class="warning">
+                        <strong>NEC Requirement:</strong> All metallic enclosures, conduit, and equipment must be bonded to the grounding system.
+                    </div>
+                `
+            }
+        };
+
+        // Add click handlers
+        const panel = document.getElementById('info-panel');
+        const closeBtn = document.getElementById('close-btn');
+
+        document.querySelectorAll('.component').forEach(component => {
+            component.addEventListener('click', function() {
+                const infoKey = this.getAttribute('data-info');
+                if (infoKey && infoContent[infoKey]) {
+                    const info = infoContent[infoKey];
+                    panel.innerHTML = `<button class="close-btn visible" id="close-btn" title="Reset">×</button><h3>${info.title}</h3>${info.content}`;
+                    
+                    // Re-attach close button listener after innerHTML change
+                    document.getElementById('close-btn').addEventListener('click', resetPanel);
+                    
+                    // Highlight active component
+                    document.querySelectorAll('.component').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        function resetPanel() {
+            panel.innerHTML = defaultContent;
+            document.querySelectorAll('.component').forEach(c => c.classList.remove('active'));
+        }
+
+        // Initial close button listener
+        closeBtn.addEventListener('click', resetPanel);
+
+        // Highlight wires on hover
+        const wireGroups = {
+            'service-drop': ['wire-hot1', 'wire-hot2', 'wire-neutral'],
+            'meter-to-panel': ['wire-meter-hot1', 'wire-meter-hot2', 'wire-meter-neutral']
+        };
+
+        Object.entries(wireGroups).forEach(([groupId, wireIds]) => {
+            const group = document.getElementById(groupId);
+            if (group) {
+                group.addEventListener('mouseenter', () => {
+                    wireIds.forEach(id => {
+                        const wire = document.getElementById(id);
+                        if (wire) wire.classList.add('active');
+                    });
+                });
+                group.addEventListener('mouseleave', () => {
+                    wireIds.forEach(id => {
+                        const wire = document.getElementById(id);
+                        if (wire) wire.classList.remove('active');
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
