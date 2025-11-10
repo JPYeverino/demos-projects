@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Board BOM - Proof of Concept</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        .nav-links {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .nav-links a {
+            display: inline-block;
+            background: #252525;
+            color: #4ade80;
+            padding: 0.6rem 1.2rem;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 0 0.5rem;
+            border: 1px solid #333;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            background: #333;
+            border-color: #4ade80;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #1a2d2d 0%, #1a1a2d 100%);
+            border: 2px solid #4ade80;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .hero-section h2 {
+            color: #4ade80;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-section p {
+            color: #ccc;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .value-prop {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .value-item {
+            background: #252525;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .value-item h3 {
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .summary-box {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-box h2 {
+            color: #ffd700;
+            margin-bottom: 1rem;
+        }
+
+        .cost-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .cost-item {
+            background: #252525;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid #4ade80;
+        }
+
+        .cost-label {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .cost-value {
+            color: #4ade80;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .section {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            color: #ffd700;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #333;
+            padding-bottom: 0.5rem;
+        }
+
+        .item-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .item-card {
+            background: #252525;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .item-card:hover {
+            border-color: #ffd700;
+            transform: translateY(-2px);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .item-name {
+            color: #e0e0e0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .item-price {
+            color: #4ade80;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+
+        .item-details {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .item-specs {
+            background: #1a1a1a;
+            padding: 0.8rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #888;
+            margin: 0.8rem 0;
+        }
+
+        .item-link {
+            display: inline-block;
+            background: #333;
+            color: #4ade80;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .item-link:hover {
+            background: #444;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .badge-required {
+            background: #2d1a1a;
+            color: #ff6b6b;
+        }
+
+        .badge-demo {
+            background: #1a2d2d;
+            color: #4ade80;
+        }
+
+        .note-box {
+            background: #1a2d2d;
+            border-left: 4px solid #4ade80;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1.5rem;
+        }
+
+        .warning-box {
+            background: #2d1a1a;
+            border-left: 4px solid #ff4444;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1.5rem;
+        }
+
+        .total-section {
+            background: linear-gradient(135deg, #1a2d2d 0%, #1a1a2d 100%);
+            border: 2px solid #4ade80;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .total-label {
+            color: #888;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .total-value {
+            color: #4ade80;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .qty {
+            color: #ffd700;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .board-specs {
+            background: #1a1a1a;
+            border: 2px solid #4ade80;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .board-specs h3 {
+            color: #4ade80;
+            margin-bottom: 1rem;
+        }
+
+        .board-specs ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .board-specs li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #ccc;
+        }
+
+        .board-specs li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4ade80;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Demo Board Bill of Materials</h1>
+            <p class="subtitle">Portable Proof-of-Concept System - Build Once, Use Forever</p>
+        </header>
+
+        <div class="nav-links">
+            <a href="index.html">← Home</a>
+            <a href="bom.html">← Installation BOM</a>
+        </div>
+
+        <div class="hero-section">
+            <h2>🔧 The Smart Engineer's Approach</h2>
+            <p>
+                Build a professional demonstration board that proves the concept works BEFORE touching the client's house. 
+                This isn't just for this project - it's a reusable sales tool for every future client.
+            </p>
+            <div class="value-prop">
+                <div class="value-item">
+                    <h3>Risk Mitigation</h3>
+                    <p>Test everything on your bench first. No surprises at the client site.</p>
+                </div>
+                <div class="value-item">
+                    <h3>Client Confidence</h3>
+                    <p>"Let me show you exactly how this works" - instant credibility.</p>
+                </div>
+                <div class="value-item">
+                    <h3>Reusable Asset</h3>
+                    <p>One investment, unlimited presentations. ROI from client #1.</p>
+                </div>
+                <div class="value-item">
+                    <h3>Learning Platform</h3>
+                    <p>If they say no, you still gained skills and kept the tools.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="board-specs">
+            <h3>What You're Building</h3>
+            <ul>
+                <li>Portable board (2'x3' plywood base)</li>
+                <li>Real mini breaker panel (2-4 spaces)</li>
+                <li>Actual 14 AWG wiring (visible, color-coded)</li>
+                <li>Working Kasa smart switch</li>
+                <li>Light fixture that actually illuminates</li>
+                <li>Plug-in power supply (no hardwiring needed for demo)</li>
+                <li>Clear labels showing voltage, current, wire gauge</li>
+                <li>Professional appearance - this IS your portfolio</li>
+            </ul>
+        </div>
+
+        <div class="summary-box">
+            <h2>Investment Overview</h2>
+            <p style="color: #ccc; line-height: 1.6;">
+                This demo board costs ~$150-200 but pays for itself on the FIRST client presentation. 
+                Every component is reusable - if client says no, you have tools for the next one. If they say yes, 
+                you've already tested everything and the installation is risk-free.
+            </p>
+            <div class="cost-summary">
+                <div class="cost-item">
+                    <div class="cost-label">Total Investment</div>
+                    <div class="cost-value">~$180</div>
+                </div>
+                <div class="cost-item">
+                    <div class="cost-label">Build Time</div>
+                    <div class="cost-value">2-3 hrs</div>
+                </div>
+                <div class="cost-item">
+                    <div class="cost-label">Reusability</div>
+                    <div class="cost-value">∞</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Electrical Components -->
+        <div class="section">
+            <h2>Electrical Components</h2>
+            
+            <div class="item-grid">
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Mini Breaker Panel (Load Center)</div>
+                        <div class="item-price">~$25</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: 1</span></p>
+                        <p style="margin-top: 0.5rem;">Small 2-4 space load center for demonstration purposes. Indoor rated is fine.</p>
+                    </div>
+                    <div class="item-specs">
+Type: 2-space or 4-space load center
+Brand: Square D, GE, or Siemens
+Rating: 100A main (demo only)
+Voltage: 120/240V
+Includes: Main breaker + bus bars
+                    </div>
+                    <a href="https://www.amazon.com/s?k=2+space+load+center" class="item-link" target="_blank">View on Amazon →</a>
+                    <div class="note-box" style="margin-top: 1rem;">
+                        <strong>Why this:</strong> Simulates the real panel in the client's house. Shows professional understanding of the complete system.
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">15A Single-Pole Breaker</div>
+                        <div class="item-price">~$8</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: 1</span></p>
+                        <p style="margin-top: 0.5rem;">Must match your load center brand. Represents Circuit #19 in the real installation.</p>
+                    </div>
+                    <div class="item-specs">
+Rating: 15 Amperes
+Poles: 1 (single-pole)
+Voltage: 120V
+Brand: MUST match load center
+Type: Standard (not GFCI/AFCI for demo)
+                    </div>
+                    <a href="https://www.amazon.com/s?k=15a+single+pole+breaker" class="item-link" target="_blank">View on Amazon →</a>
+                    <div class="warning-box" style="margin-top: 1rem;">
+                        <strong>⚠ Brand Compatibility:</strong> Breakers MUST match the load center brand. Square D breakers only fit Square D panels, etc.
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">14 AWG Wire (3-conductor)</div>
+                        <div class="item-price">~$15</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: 10-15 feet</span></p>
+                        <p style="margin-top: 0.5rem;">Romex-style cable with hot (black), neutral (white), and ground (bare). Matches actual house wiring.</p>
+                    </div>
+                    <div class="item-specs">
+Type: 14/2 w/ ground (Romex)
+Conductors: Black, White, Bare
+Gauge: 14 AWG
+Length: 10-15 feet sufficient
+Rating: 600V, 90°C
+                    </div>
+                    <a href="https://www.amazon.com/s?k=14+2+romex+wire" class="item-link" target="_blank">View on Amazon →</a>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Kasa Smart Switch (HS200)</div>
+                        <div class="item-price">~$20</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: 1</span></p>
+                        <p style="margin-top: 0.5rem;">Same switch you'll install at client site. Demo proves it works before installation.</p>
+                    </div>
+                    <div class="item-specs">
+Model: HS200 (or KS225)
+Rating: 15A, 120V
+WiFi: 2.4GHz
+App: Kasa Smart
+Voice: Google/Alexa compatible
+                    </div>
+                    <a href="https://www.amazon.com/s?k=kasa+hs200" class="item-link" target="_blank">View on Amazon →</a>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Light Fixture & Bulb</div>
+                        <div class="item-price">~$15</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: 1 fixture + 1 bulb</span></p>
+                        <p style="margin-top: 0.5rem;">Simple porcelain socket or basic fixture. LED bulb for low power draw.</p>
+                    </div>
+                    <div class="item-specs">
+Fixture: Porcelain keyless socket
+OR: Basic ceiling fixture
+Bulb: LED, 9-15W (60W equivalent)
+Base: Standard E26/E27
+Voltage: 120V
+                    </div>
+                    <a href="https://www.amazon.com/s?k=porcelain+light+socket" class="item-link" target="_blank">View on Amazon →</a>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Electrical Box (Single Gang)</div>
+                        <div class="item-price">~$3</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: 1</span></p>
+                        <p style="margin-top: 0.5rem;">Houses the smart switch. Mount to plywood board.</p>
+                    </div>
+                    <div class="item-specs">
+Type: Single-gang, new work
+Material: Plastic or metal
+Mounting: Nails or screws to board
+Depth: Standard (2" minimum)
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Wire Nuts & Connectors</div>
+                        <div class="item-price">~$5</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: 1 assorted pack</span></p>
+                        <p style="margin-top: 0.5rem;">For making secure connections throughout the demo board.</p>
+                    </div>
+                    <div class="item-specs">
+Sizes: Red/orange for 14 AWG
+Quantity: 10-20 assorted
+Type: Twist-on wire connectors
+UL Listed: Required
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Power Cord with Plug</div>
+                        <div class="item-price">~$10</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: 1</span></p>
+                        <p style="margin-top: 0.5rem;">Connects demo board to wall outlet. No hardwiring needed - this is portable!</p>
+                    </div>
+                    <div class="item-specs">
+Type: 3-wire grounded cord
+Length: 6-10 feet
+Rating: 14 AWG, 15A
+Plug: NEMA 5-15P (standard 3-prong)
+End: Bare wires to connect to panel
+                    </div>
+                    <a href="https://www.amazon.com/s?k=power+cord+with+bare+wires" class="item-link" target="_blank">View on Amazon →</a>
+                    <div class="note-box" style="margin-top: 1rem;">
+                        <strong>Demo Power:</strong> This makes the board portable. Plug into any outlet to demonstrate. Unplug for safety when working on it.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Board Construction -->
+        <div class="section">
+            <h2>Board & Mounting Materials</h2>
+            
+            <div class="item-grid">
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Plywood Board</div>
+                        <div class="item-price">~$15</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: 1 piece</span></p>
+                        <p style="margin-top: 0.5rem;">Base for mounting all components. Size for portability and visibility.</p>
+                    </div>
+                    <div class="item-specs">
+Size: 24" x 36" (2' x 3')
+Thickness: 1/2" or 3/4"
+Type: Any grade plywood
+Finish: Optional paint/stain
+Edges: Sand smooth
+                    </div>
+                    <div class="note-box" style="margin-top: 1rem;">
+                        <strong>Pro tip:</strong> Paint it white or light gray - makes wires and labels more visible during presentations.
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Mounting Hardware</div>
+                        <div class="item-price">~$8</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: Assorted</span></p>
+                        <p style="margin-top: 0.5rem;">Screws for mounting panel, boxes, and fixtures to board.</p>
+                    </div>
+                    <div class="item-specs">
+Wood screws: #8 x 1" (panel mount)
+Sheet metal screws: For boxes
+Cable staples: Hold wire to board
+Assorted: Small hardware pack
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Labels & Markers</div>
+                        <div class="item-price">~$10</div>
+                    </div>
+                    <span class="badge badge-demo">DEMO QUALITY</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: Label maker or printed labels</span></p>
+                        <p style="margin-top: 0.5rem;">Professional labeling makes the demo board educational and impressive.</p>
+                    </div>
+                    <div class="item-specs">
+Labels needed:
+- "120V Hot (Black)"
+- "Neutral (White)"
+- "Ground (Bare/Green)"
+- "15A Circuit Breaker"
+- "Smart Switch (WiFi)"
+- "Load: LED Light"
+- Voltage/current specs
+                    </div>
+                    <div class="note-box" style="margin-top: 1rem;">
+                        <strong>Professional touch:</strong> Clear labels show you know what you're doing. Educational for client, impressive for portfolio photos.
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Wire Management Clips</div>
+                        <div class="item-price">~$5</div>
+                    </div>
+                    <span class="badge badge-demo">DEMO QUALITY</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: 10-20 clips</span></p>
+                        <p style="margin-top: 0.5rem;">Keep wires organized and visible on the board. Neat = professional.</p>
+                    </div>
+                    <div class="item-specs">
+Type: Plastic cable clips
+OR: Romex staples
+OR: Zip ties + screw anchors
+Purpose: Route wires neatly on board
+Spacing: Every 6-8 inches
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tools (Reference) -->
+        <div class="section">
+            <h2>Tools Required (If Not Already Owned)</h2>
+            <p style="color: #888; margin-bottom: 1.5rem;">These are the same tools from the Installation BOM - if you're building the demo board, you need these anyway.</p>
+            
+            <div class="item-grid">
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Non-Contact Voltage Tester</div>
+                        <div class="item-price">~$15</div>
+                    </div>
+                    <span class="badge badge-required">SAFETY</span>
+                    <div class="item-details">
+                        <p>Test before touching. Always.</p>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Screwdriver Set</div>
+                        <div class="item-price">~$12</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED</span>
+                    <div class="item-details">
+                        <p>Phillips #2 and flathead for terminals.</p>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Wire Stripper/Cutter</div>
+                        <div class="item-price">~$12</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED</span>
+                    <div class="item-details">
+                        <p>Strip 14 AWG wire for connections.</p>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Drill with Bits</div>
+                        <div class="item-price">~$40</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED</span>
+                    <div class="item-details">
+                        <p>Mount panel and boxes to plywood board.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Cost -->
+        <div class="total-section">
+            <div class="total-label">TOTAL DEMO BOARD INVESTMENT</div>
+            <div class="total-value">~$180-200</div>
+            <p style="color: #aaa; margin-top: 1rem; font-size: 0.95rem;">
+                Electrical: ~$110 • Board/Materials: ~$40 • Tools: ~$50 (if needed)<br>
+                <strong>Reusable for every future client presentation</strong>
+            </p>
+        </div>
+
+        <div class="note-box" style="margin-top: 2rem;">
+            <h3 style="color: #4ade80; margin-bottom: 0.8rem;">The Business Case</h3>
+            <p style="line-height: 1.8;">
+                <strong>Investment: $180</strong><br>
+                <strong>Your rate: $150 per installation</strong><br>
+                <strong>ROI: Immediate on first client</strong><br><br>
+                
+                But the real value isn't the money - it's the credibility. Walking into a presentation with a working demo board says 
+                "I'm a professional who tests before implementing." That's worth more than the cost difference between getting hired or not.
+                <br><br>
+                Plus, if the client says no, you learned electrical systems, built portfolio content, and kept all the tools for the next opportunity.
+            </p>
+        </div>
+
+        <div class="warning-box" style="margin-top: 1.5rem;">
+            <h3 style="color: #ff6b6b; margin-bottom: 0.8rem;">⚠ Safety - Demo Board Edition</h3>
+            <p style="line-height: 1.6;">
+                <strong>This board will have REAL 120V electricity when plugged in.</strong><br><br>
+                
+                Build it with the same care as a real installation:<br>
+                • All connections must be in electrical boxes (not exposed)<br>
+                • Use proper wire nuts - no tape or twist connections<br>
+                • Test with voltage tester before and after<br>
+                • UNPLUG when working on it<br>
+                • Never bypass the breaker "to save money"<br>
+                • Ground everything properly<br><br>
+                
+                This isn't a toy - it's a real electrical system. Treat it with respect.
+            </p>
+        </div>
+
+        <div class="note-box" style="margin-top: 1.5rem;">
+            <h3 style="color: #4ade80; margin-bottom: 0.8rem;">Next Steps</h3>
+            <p style="line-height: 1.8;">
+                1. Order all components (1-2 days shipping)<br>
+                2. Build the board (2-3 hours, take your time)<br>
+                3. Test everything before client presentation<br>
+                4. Document with photos/video for portfolio<br>
+                5. Schedule demo with client<br>
+                6. If approved: you already tested the switch, just install it<br>
+                7. If rejected: you have a demo board for the next client<br>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
