@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill of Materials - Patio Lighting Automation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        .nav-links {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .nav-links a {
+            display: inline-block;
+            background: #252525;
+            color: #4ade80;
+            padding: 0.6rem 1.2rem;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 0 0.5rem;
+            border: 1px solid #333;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            background: #333;
+            border-color: #4ade80;
+        }
+
+        .summary-box {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-box h2 {
+            color: #ffd700;
+            margin-bottom: 1rem;
+        }
+
+        .cost-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .cost-item {
+            background: #252525;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid #4ade80;
+        }
+
+        .cost-label {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .cost-value {
+            color: #4ade80;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .section {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            color: #ffd700;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #333;
+            padding-bottom: 0.5rem;
+        }
+
+        .item-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .item-card {
+            background: #252525;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .item-card:hover {
+            border-color: #ffd700;
+            transform: translateY(-2px);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .item-name {
+            color: #e0e0e0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .item-price {
+            color: #4ade80;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+
+        .item-details {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .item-specs {
+            background: #1a1a1a;
+            padding: 0.8rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #888;
+            margin: 0.8rem 0;
+        }
+
+        .item-link {
+            display: inline-block;
+            background: #333;
+            color: #4ade80;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .item-link:hover {
+            background: #444;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .badge-required {
+            background: #2d1a1a;
+            color: #ff6b6b;
+        }
+
+        .badge-recommended {
+            background: #1a2d2d;
+            color: #4ade80;
+        }
+
+        .badge-optional {
+            background: #2a2a1a;
+            color: #ffd700;
+        }
+
+        .note-box {
+            background: #1a2d2d;
+            border-left: 4px solid #4ade80;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1.5rem;
+        }
+
+        .warning-box {
+            background: #2d1a1a;
+            border-left: 4px solid #ff4444;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1.5rem;
+        }
+
+        .total-section {
+            background: linear-gradient(135deg, #1a2d2d 0%, #1a1a2d 100%);
+            border: 2px solid #4ade80;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .total-label {
+            color: #888;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .total-value {
+            color: #4ade80;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .qty {
+            color: #ffd700;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bill of Materials</h1>
+            <p class="subtitle">Back Patio Lighting Automation - Complete Parts List</p>
+        </header>
+
+        <div class="nav-links">
+            <a href="index.html">← Home</a>
+            <a href="circuit-detail.html">← Circuit Detail</a>
+        </div>
+
+        <div class="summary-box">
+            <h2>Project Overview</h2>
+            <p style="color: #ccc; line-height: 1.6;">
+                This BOM covers everything needed to upgrade Circuit #19 from manual toggle control to smart automation. 
+                The project involves replacing one switch in a 4-gang plate with minimal tools and no electrical modifications beyond the switch itself.
+            </p>
+            <div class="cost-summary">
+                <div class="cost-item">
+                    <div class="cost-label">Required Parts</div>
+                    <div class="cost-value">~$25</div>
+                </div>
+                <div class="cost-item">
+                    <div class="cost-label">Recommended Tools</div>
+                    <div class="cost-value">~$30</div>
+                </div>
+                <div class="cost-item">
+                    <div class="cost-label">Installation Time</div>
+                    <div class="cost-value">30 min</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Required Components -->
+        <div class="section">
+            <h2>Required Components</h2>
+            
+            <div class="item-grid">
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">TP-Link Kasa Smart Switch</div>
+                        <div class="item-price">~$20</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: 1</span></p>
+                        <p style="margin-top: 0.5rem;">WiFi-enabled smart switch with physical control. Direct replacement for existing toggle switch.</p>
+                    </div>
+                    <div class="item-specs">
+Model: HS200 (or KS225 if dimming needed)
+Rating: 15A, 120V
+Requirements: Neutral wire (present)
+Features: WiFi, App, Voice, Scheduling
+Compatibility: Google Home, Alexa
+Warranty: 2 years
+                    </div>
+                    <a href="https://www.amazon.com/s?k=kasa+hs200" class="item-link" target="_blank">View on Amazon →</a>
+                    <div class="note-box" style="margin-top: 1rem;">
+                        <strong>Why this switch:</strong> Reliable brand, no hub required, works with existing wiring, maintains manual control even if WiFi fails.
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Wire Nuts (if needed)</div>
+                        <div class="item-price">~$3</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: 1 pack</span></p>
+                        <p style="margin-top: 0.5rem;">Assorted wire nuts for secure connections. Likely already present, but good to have spares.</p>
+                    </div>
+                    <div class="item-specs">
+Sizes: Small (red/orange) for 14 AWG
+Type: UL Listed
+Quantity: Pack of 10-20 assorted
+                    </div>
+                    <a href="https://www.amazon.com/s?k=wire+nuts+assorted" class="item-link" target="_blank">View on Amazon →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Required Tools -->
+        <div class="section">
+            <h2>Required Tools & Safety Equipment</h2>
+            
+            <div class="item-grid">
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Non-Contact Voltage Tester</div>
+                        <div class="item-price">~$15</div>
+                    </div>
+                    <span class="badge badge-required">SAFETY CRITICAL</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: 1</span></p>
+                        <p style="margin-top: 0.5rem;">Verify power is OFF before touching any wires. Non-negotiable safety tool.</p>
+                    </div>
+                    <div class="item-specs">
+Type: Non-contact (pen style)
+Range: 50-1000V AC
+Alerts: Visual + Audible
+Battery: Included
+Brands: Klein, Fluke, Sperry
+                    </div>
+                    <a href="https://www.amazon.com/s?k=non+contact+voltage+tester" class="item-link" target="_blank">View on Amazon →</a>
+                    <div class="warning-box" style="margin-top: 1rem;">
+                        <strong>⚠ CRITICAL:</strong> Never work on electrical without this tool. Test EVERY wire before touching, even after turning off breaker.
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Screwdriver Set</div>
+                        <div class="item-price">~$12</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: 1 set</span></p>
+                        <p style="margin-top: 0.5rem;">Phillips and flathead for removing switch plate and wiring terminals.</p>
+                    </div>
+                    <div class="item-specs">
+Types needed: 
+  - Phillips #2 (switch plate screws)
+  - Flathead small/medium (terminals)
+Insulated handles: Preferred
+                    </div>
+                    <a href="https://www.amazon.com/s?k=screwdriver+set+insulated" class="item-link" target="_blank">View on Amazon →</a>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Headlamp or Flashlight</div>
+                        <div class="item-price">~$10</div>
+                    </div>
+                    <span class="badge badge-recommended">RECOMMENDED</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: 1</span></p>
+                        <p style="margin-top: 0.5rem;">Breaker will be off, so room lights won't work. Hands-free lighting is crucial.</p>
+                    </div>
+                    <div class="item-specs">
+Type: LED headlamp preferred
+Battery: Rechargeable or AAA
+Brightness: 100+ lumens adequate
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Wire Stripper/Cutter</div>
+                        <div class="item-price">~$8</div>
+                    </div>
+                    <span class="badge badge-optional">OPTIONAL</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: 1</span></p>
+                        <p style="margin-top: 0.5rem;">Only needed if existing wire ends are damaged and need trimming.</p>
+                    </div>
+                    <div class="item-specs">
+Type: Combination tool
+Gauge: 10-22 AWG (14 AWG needed)
+Features: Strip, cut, crimp
+                    </div>
+                    <a href="https://www.amazon.com/s?k=wire+stripper" class="item-link" target="_blank">View on Amazon →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Software/Setup -->
+        <div class="section">
+            <h2>Software & Setup Requirements</h2>
+            
+            <div class="item-grid">
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Kasa Smart App</div>
+                        <div class="item-price">Free</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED - SETUP ONLY</span>
+                    <div class="item-details">
+                        <p><span class="qty">Platforms: iOS, Android</span></p>
+                        <p style="margin-top: 0.5rem;">Required for initial WiFi setup. After configuration, can control via Google Home exclusively.</p>
+                    </div>
+                    <div class="item-specs">
+Initial Setup Steps:
+1. Download Kasa app
+2. Create account (email)
+3. Add device via app
+4. Connect switch to WiFi
+5. Link to Google Home
+6. (Optional) Delete Kasa app
+                    </div>
+                    <a href="https://www.kasasmart.com/us/products/smart-switches" class="item-link" target="_blank">Visit Kasa Website →</a>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Google Home App</div>
+                        <div class="item-price">Free</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED</span>
+                    <div class="item-details">
+                        <p><span class="qty">Platforms: iOS, Android</span></p>
+                        <p style="margin-top: 0.5rem;">Primary control interface for automation, scheduling, and voice commands.</p>
+                    </div>
+                    <div class="item-specs">
+Features Used:
+- Link Kasa account
+- Create routines/schedules
+- Voice control setup
+- Room assignment
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">WiFi Network</div>
+                        <div class="item-price">-</div>
+                    </div>
+                    <span class="badge badge-required">REQUIRED</span>
+                    <div class="item-details">
+                        <p style="margin-top: 0.5rem;">2.4GHz WiFi required at switch location. Smart switches don't support 5GHz.</p>
+                    </div>
+                    <div class="item-specs">
+Requirements:
+- 2.4GHz band (NOT 5GHz)
+- WPA2 security
+- SSID & password available
+- Signal strength: Good at switch location
+                    </div>
+                    <div class="note-box" style="margin-top: 1rem;">
+                        <strong>Check WiFi:</strong> If router uses same SSID for 2.4GHz and 5GHz, temporarily disable 5GHz during setup or use router settings to force 2.4GHz.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Optional/Future -->
+        <div class="section">
+            <h2>Future Expansion (Optional)</h2>
+            
+            <div class="item-grid">
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Additional Kasa Switches</div>
+                        <div class="item-price">~$20 each</div>
+                    </div>
+                    <span class="badge badge-optional">FUTURE</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: 3 (for complete 4-gang upgrade)</span></p>
+                        <p style="margin-top: 0.5rem;">If client approves, upgrade remaining 3 switches in the 4-gang plate for complete smart control.</p>
+                    </div>
+                    <div class="note-box" style="margin-top: 1rem;">
+                        <strong>Recommendation:</strong> Start with one switch. Once client sees the value, propose upgrading the rest.
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-name">Motion Sensor (Optional)</div>
+                        <div class="item-price">~$25</div>
+                    </div>
+                    <span class="badge badge-optional">ENHANCEMENT</span>
+                    <div class="item-details">
+                        <p><span class="qty">Qty: 1</span></p>
+                        <p style="margin-top: 0.5rem;">Add motion-activated lighting. Kasa or compatible sensor that integrates with Google Home.</p>
+                    </div>
+                    <div class="item-specs">
+Features:
+- Motion detection
+- Light level sensor
+- Smart Home integration
+- Battery powered
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Cost -->
+        <div class="total-section">
+            <div class="total-label">TOTAL PROJECT COST (Required Items Only)</div>
+            <div class="total-value">~$50-60</div>
+            <p style="color: #aaa; margin-top: 1rem; font-size: 0.95rem;">
+                Switch + Safety Tools + Wire Nuts<br>
+                One-time investment • Tools reusable for future projects
+            </p>
+        </div>
+
+        <div class="note-box" style="margin-top: 2rem;">
+            <h3 style="color: #4ade80; margin-bottom: 0.8rem;">Shopping Strategy</h3>
+            <p style="line-height: 1.6;">
+                <strong>Priority 1 (Do First):</strong> Get the non-contact voltage tester and basic screwdrivers if you don't have them. These are safety-critical.<br><br>
+                <strong>Priority 2:</strong> Order the Kasa HS200 switch. Check reviews for the specific model.<br><br>
+                <strong>Priority 3:</strong> Verify existing wire nuts in the switch box are in good condition during inspection. Buy new ones only if needed.
+            </p>
+        </div>
+
+        <div class="warning-box" style="margin-top: 1.5rem;">
+            <h3 style="color: #ff6b6b; margin-bottom: 0.8rem;">⚠ Before You Buy</h3>
+            <p style="line-height: 1.6;">
+                <strong>Verify neutral wire presence:</strong> Remove switch plate (power OFF) and confirm there's a bundle of white wires in the box. The Kasa HS200 requires neutral.<br><br>
+                If NO neutral wire is present, you'll need either:<br>
+                • Lutron Caseta (works without neutral, but requires hub ~$80)<br>
+                • Run new wire (professional electrician recommended)
+            </p>
+        </div>
+    </div>
+</body>
+</html>
