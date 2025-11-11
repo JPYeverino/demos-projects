@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOM del Tablero de Demostración - Prueba de Concepto</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            padding: 2rem;
+        }
+        .language-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+        }
+        .language-toggle a {
+            display: inline-block;
+            background: #252525;
+            color: #4ade80;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 6px;
+            border: 1px solid #333;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        .language-toggle a:hover {
+            background: #333;
+            border-color: #4ade80;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 2rem; }
+        h1 { color: #ffd700; margin-bottom: 0.5rem; }
+        .subtitle { color: #888; font-size: 1.1rem; }
+        .nav-links { text-align: center; margin-bottom: 2rem; }
+        .nav-links a {
+            display: inline-block;
+            background: #252525;
+            color: #4ade80;
+            padding: 0.6rem 1.2rem;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 0 0.5rem;
+            border: 1px solid #333;
+            transition: all 0.2s;
+        }
+        .nav-links a:hover { background: #333; border-color: #4ade80; }
+        .hero {
+            background: linear-gradient(135deg, #1a2d2d 0%, #1a1a2d 100%);
+            border: 2px solid #4ade80;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .hero h2 {
+            color: #4ade80;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            color: #ccc;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        .section {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .section h2 {
+            color: #ffd700;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #333;
+            padding-bottom: 0.5rem;
+        }
+        .section h3 {
+            color: #4ade80;
+            margin-bottom: 1rem;
+        }
+        .section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .section li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #ccc;
+        }
+        .section li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4ade80;
+            font-weight: bold;
+        }
+        .total {
+            background: linear-gradient(135deg, #1a2d2d 0%, #1a1a2d 100%);
+            border: 2px solid #4ade80;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+        }
+        .total-value {
+            color: #4ade80;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .note {
+            background: #1a2d2d;
+            border-left: 4px solid #4ade80;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1.5rem;
+        }
+        .warning {
+            background: #2d1a1a;
+            border-left: 4px solid #ff4444;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="language-toggle">
+        <a href="demo-board-bom.html">English</a>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Lista de Materiales del Tablero de Demostración</h1>
+            <p class="subtitle">Sistema Portátil de Prueba de Concepto - Constrúyelo Una Vez, Úsalo Siempre</p>
+        </header>
+
+        <div class="nav-links">
+            <a href="index-es.html">← Inicio</a>
+            <a href="bom-es.html">← BOM de Instalación</a>
+        </div>
+
+        <div class="hero">
+            <h2>🔧 El Enfoque del Ingeniero Inteligente</h2>
+            <p>
+                Construye un tablero de demostración profesional que prueba que el concepto funciona ANTES de tocar la casa del cliente.
+                Esto no es solo para este proyecto - es una herramienta de ventas reutilizable para cada cliente futuro.
+            </p>
+        </div>
+
+        <div class="section">
+            <h3>Lo Que Estás Construyendo</h3>
+            <ul>
+                <li>Tablero portátil (base de triplay de 60cm x 90cm)</li>
+                <li>Panel de interruptores mini real (2-4 espacios)</li>
+                <li>Cableado 14 AWG real (visible, codificado por colores)</li>
+                <li>Interruptor inteligente Kasa funcional</li>
+                <li>Luminaria que realmente ilumina</li>
+                <li>Fuente de alimentación enchufable (no se necesita cableado permanente para demo)</li>
+                <li>Etiquetas claras mostrando voltaje, corriente, calibre de cable</li>
+                <li>Apariencia profesional - esto ES tu portafolio</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Resumen de Inversión</h2>
+            <p style="color: #ccc; line-height: 1.6; margin-bottom: 1rem;">
+                Este tablero de demostración cuesta ~$150-200 pero se paga a sí mismo en la PRIMERA presentación al cliente.
+                Cada componente es reutilizable - si el cliente dice no, tienes herramientas para el siguiente. Si dicen sí,
+                ya has probado todo y la instalación está libre de riesgos.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                <div style="background: #252525; padding: 1rem; border-radius: 6px; border-left: 4px solid #4ade80;">
+                    <div style="color: #888; font-size: 0.9rem; margin-bottom: 0.3rem;">Inversión Total</div>
+                    <div style="color: #4ade80; font-size: 1.5rem; font-weight: 600;">~$180</div>
+                </div>
+                <div style="background: #252525; padding: 1rem; border-radius: 6px; border-left: 4px solid #4ade80;">
+                    <div style="color: #888; font-size: 0.9rem; margin-bottom: 0.3rem;">Tiempo de Construcción</div>
+                    <div style="color: #4ade80; font-size: 1.5rem; font-weight: 600;">2-3 hrs</div>
+                </div>
+                <div style="background: #252525; padding: 1rem; border-radius: 6px; border-left: 4px solid #4ade80;">
+                    <div style="color: #888; font-size: 0.9rem; margin-bottom: 0.3rem;">Reutilizabilidad</div>
+                    <div style="color: #4ade80; font-size: 1.5rem; font-weight: 600;">∞</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Componentes Principales</h2>
+            <ul>
+                <li><strong>Panel de Interruptores Mini:</strong> ~$25 - Centro de carga de 2-4 espacios</li>
+                <li><strong>Interruptor de 15A:</strong> ~$8 - Unipolar, debe coincidir con la marca del panel</li>
+                <li><strong>Cable 14 AWG:</strong> ~$15 - 3-4 metros de Romex 14/2 con tierra</li>
+                <li><strong>Interruptor Inteligente Kasa:</strong> ~$20 - Modelo HS200</li>
+                <li><strong>Luminaria y Foco:</strong> ~$15 - Base de porcelana simple y LED</li>
+                <li><strong>Caja Eléctrica:</strong> ~$3 - Gang sencillo para alojar el interruptor</li>
+                <li><strong>Conectores de Cable:</strong> ~$5 - Conectores de rosca surtidos</li>
+                <li><strong>Cable de Alimentación con Enchufe:</strong> ~$10 - Hace el tablero portátil</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Materiales del Tablero y Montaje</h2>
+            <ul>
+                <li><strong>Tablero de Triplay:</strong> ~$15 - 60cm x 90cm, grosor de 1.25-2cm</li>
+                <li><strong>Hardware de Montaje:</strong> ~$8 - Tornillos, grapas para cable</li>
+                <li><strong>Etiquetas y Marcadores:</strong> ~$10 - Etiquetadora o etiquetas impresas</li>
+                <li><strong>Clips de Gestión de Cables:</strong> ~$5 - Mantiene los cables organizados</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Herramientas Requeridas</h2>
+            <p style="color: #888; margin-bottom: 1rem;">Mismas herramientas del BOM de Instalación</p>
+            <ul>
+                <li><strong>Probador de Voltaje Sin Contacto:</strong> ~$15 - SEGURIDAD</li>
+                <li><strong>Juego de Destornilladores:</strong> ~$12 - Phillips y plano</li>
+                <li><strong>Pelador/Cortador de Cable:</strong> ~$12 - Para conexiones</li>
+                <li><strong>Taladro con Brocas:</strong> ~$40 - Montar panel y cajas</li>
+            </ul>
+        </div>
+
+        <div class="total">
+            <div style="color: #888; font-size: 1.1rem; margin-bottom: 0.5rem;">INVERSIÓN TOTAL DEL TABLERO DE DEMOSTRACIÓN</div>
+            <div class="total-value">~$180-200</div>
+            <p style="color: #aaa; margin-top: 1rem; font-size: 0.95rem;">
+                Eléctrico: ~$110 • Tablero/Materiales: ~$40 • Herramientas: ~$50 (si es necesario)<br>
+                <strong>Reutilizable para cada presentación futura al cliente</strong>
+            </p>
+        </div>
+
+        <div class="note" style="margin-top: 2rem;">
+            <h3 style="color: #4ade80; margin-bottom: 0.8rem;">El Caso de Negocio</h3>
+            <p style="line-height: 1.8;">
+                <strong>Inversión: $180</strong><br>
+                <strong>Tu tarifa: $150 por instalación</strong><br>
+                <strong>ROI: Inmediato en el primer cliente</strong><br><br>
+
+                Pero el valor real no es el dinero - es la credibilidad. Entrar a una presentación con un tablero de demostración funcional dice
+                "Soy un profesional que prueba antes de implementar." Eso vale más que la diferencia de costo entre ser contratado o no.
+                <br><br>
+                Además, si el cliente dice no, aprendiste sistemas eléctricos, construiste contenido para portafolio, y conservaste todas las herramientas para la siguiente oportunidad.
+            </p>
+        </div>
+
+        <div class="warning" style="margin-top: 1.5rem;">
+            <h3 style="color: #ff6b6b; margin-bottom: 0.8rem;">⚠ Seguridad - Edición Tablero de Demostración</h3>
+            <p style="line-height: 1.6;">
+                <strong>Este tablero tendrá electricidad REAL de 120V cuando esté enchufado.</strong><br><br>
+
+                Constrúyelo con el mismo cuidado que una instalación real:<br>
+                • Todas las conexiones deben estar en cajas eléctricas (no expuestas)<br>
+                • Usa conectores de cable apropiados - sin cinta o conexiones retorcidas<br>
+                • Prueba con probador de voltaje antes y después<br>
+                • DESENCHUFA cuando trabajes en él<br>
+                • Nunca omitas el interruptor "para ahorrar dinero"<br>
+                • Conecta todo a tierra apropiadamente<br><br>
+
+                Esto no es un juguete - es un sistema eléctrico real. Trátalo con respeto.
+            </p>
+        </div>
+
+        <div class="note" style="margin-top: 1.5rem;">
+            <h3 style="color: #4ade80; margin-bottom: 0.8rem;">Próximos Pasos</h3>
+            <p style="line-height: 1.8;">
+                1. Ordenar todos los componentes (envío de 1-2 días)<br>
+                2. Construir el tablero (2-3 horas, tómate tu tiempo)<br>
+                3. Probar todo antes de la presentación al cliente<br>
+                4. Documentar con fotos/video para portafolio<br>
+                5. Programar demostración con el cliente<br>
+                6. Si se aprueba: ya probaste el interruptor, solo instálalo<br>
+                7. Si se rechaza: tienes un tablero de demo para el siguiente cliente<br>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

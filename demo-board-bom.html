@@ -18,6 +18,30 @@
             padding: 2rem;
         }
 
+        .language-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+        }
+
+        .language-toggle a {
+            display: inline-block;
+            background: #252525;
+            color: #4ade80;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 6px;
+            border: 1px solid #333;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .language-toggle a:hover {
+            background: #333;
+            border-color: #4ade80;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -323,6 +347,10 @@
     </style>
 </head>
 <body>
+    <div class="language-toggle">
+        <a href="demo-board-bom-es.html">Español</a>
+    </div>
+
     <div class="container">
         <header>
             <h1>Demo Board Bill of Materials</h1>

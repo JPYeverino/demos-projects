@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Materiales - Automatización de Iluminación del Patio</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            padding: 2rem;
+        }
+        .language-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+        }
+        .language-toggle a {
+            display: inline-block;
+            background: #252525;
+            color: #4ade80;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 6px;
+            border: 1px solid #333;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        .language-toggle a:hover {
+            background: #333;
+            border-color: #4ade80;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 2rem; }
+        h1 { color: #ffd700; margin-bottom: 0.5rem; }
+        .subtitle { color: #888; font-size: 1.1rem; }
+        .nav-links { text-align: center; margin-bottom: 2rem; }
+        .nav-links a {
+            display: inline-block;
+            background: #252525;
+            color: #4ade80;
+            padding: 0.6rem 1.2rem;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 0 0.5rem;
+            border: 1px solid #333;
+            transition: all 0.2s;
+        }
+        .nav-links a:hover { background: #333; border-color: #4ade80; }
+        .section {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .section h2 {
+            color: #ffd700;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #333;
+            padding-bottom: 0.5rem;
+        }
+        .item {
+            background: #252525;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.5rem;
+        }
+        .item-name {
+            color: #e0e0e0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .item-price {
+            color: #4ade80;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        .item-desc {
+            color: #aaa;
+            line-height: 1.6;
+            margin-top: 0.5rem;
+        }
+        .total {
+            background: linear-gradient(135deg, #1a2d2d 0%, #1a1a2d 100%);
+            border: 2px solid #4ade80;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+        }
+        .total-value {
+            color: #4ade80;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .warning {
+            background: #2d1a1a;
+            border-left: 4px solid #ff4444;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="language-toggle">
+        <a href="bom.html">English</a>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Lista de Materiales</h1>
+            <p class="subtitle">Automatización de Iluminación del Patio Trasero - Lista Completa de Partes</p>
+        </header>
+
+        <div class="nav-links">
+            <a href="index-es.html">← Inicio</a>
+            <a href="circuit-detail-es.html">← Detalle del Circuito</a>
+        </div>
+
+        <div class="section">
+            <h2>Componentes Requeridos</h2>
+            
+            <div class="item">
+                <div class="item-header">
+                    <div class="item-name">Interruptor Inteligente TP-Link Kasa</div>
+                    <div class="item-price">~$20</div>
+                </div>
+                <div class="item-desc">
+                    <p><strong>Cantidad: 1</strong></p>
+                    <p>Interruptor inteligente habilitado para WiFi con control físico. Reemplazo directo para el interruptor de palanca existente.</p>
+                    <p><strong>Modelo:</strong> HS200 (o KS225 si se necesita atenuación)</p>
+                    <p><strong>Características:</strong> WiFi, App, Voz, Programación, Compatible con Google Home y Alexa</p>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="item-header">
+                    <div class="item-name">Conectores de Cable</div>
+                    <div class="item-price">~$3</div>
+                </div>
+                <div class="item-desc">
+                    <p><strong>Cantidad: 1 paquete</strong></p>
+                    <p>Conectores de cable surtidos para conexiones seguras. Probablemente ya presentes, pero es bueno tener repuestos.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Herramientas y Equipo de Seguridad Requeridos</h2>
+            
+            <div class="item">
+                <div class="item-header">
+                    <div class="item-name">Probador de Voltaje Sin Contacto</div>
+                    <div class="item-price">~$15</div>
+                </div>
+                <div class="item-desc">
+                    <p><strong>Cantidad: 1 - CRÍTICO PARA SEGURIDAD</strong></p>
+                    <p>Verificar que la corriente está APAGADA antes de tocar cualquier cable. Herramienta de seguridad no negociable.</p>
+                    <div class="warning">
+                        <strong>⚠ CRÍTICO:</strong> Nunca trabajes en electricidad sin esta herramienta. Prueba CADA cable antes de tocar, incluso después de apagar el interruptor.
+                    </div>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="item-header">
+                    <div class="item-name">Juego de Destornilladores</div>
+                    <div class="item-price">~$12</div>
+                </div>
+                <div class="item-desc">
+                    <p><strong>Cantidad: 1 juego</strong></p>
+                    <p>Phillips y plano para remover la placa del interruptor y terminales de cableado.</p>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="item-header">
+                    <div class="item-name">Linterna Frontal o Linterna</div>
+                    <div class="item-price">~$10</div>
+                </div>
+                <div class="item-desc">
+                    <p><strong>Cantidad: 1 - RECOMENDADO</strong></p>
+                    <p>El interruptor estará apagado, así que las luces de la habitación no funcionarán. La iluminación con manos libres es crucial.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Requisitos de Software y Configuración</h2>
+            
+            <div class="item">
+                <div class="item-name">Aplicación Kasa Smart (Gratis)</div>
+                <div class="item-desc">
+                    <p>Requerida para configuración inicial de WiFi. Después de la configuración, se puede controlar vía Google Home exclusivamente.</p>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="item-name">Aplicación Google Home (Gratis)</div>
+                <div class="item-desc">
+                    <p>Interfaz de control principal para automatización, programación y comandos de voz.</p>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="item-name">Red WiFi</div>
+                <div class="item-desc">
+                    <p>WiFi de 2.4GHz requerido en la ubicación del interruptor. Los interruptores inteligentes no soportan 5GHz.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="total">
+            <div style="color: #888; font-size: 1.1rem; margin-bottom: 0.5rem;">COSTO TOTAL DEL PROYECTO (Solo Artículos Requeridos)</div>
+            <div class="total-value">~$50-60</div>
+            <p style="color: #aaa; margin-top: 1rem; font-size: 0.95rem;">
+                Interruptor + Herramientas de Seguridad + Conectores de Cable<br>
+                Inversión única • Herramientas reutilizables para proyectos futuros
+            </p>
+        </div>
+
+        <div class="warning" style="margin-top: 2rem;">
+            <h3 style="color: #ff6b6b; margin-bottom: 0.8rem;">⚠ Antes de Comprar</h3>
+            <p style="line-height: 1.6;">
+                <strong>Verificar presencia de cable neutro:</strong> Remover la placa del interruptor (corriente APAGADA) y confirmar que hay un conjunto de cables blancos en la caja. El Kasa HS200 requiere neutro.<br><br>
+                Si NO hay cable neutro presente, necesitarás:<br>
+                • Lutron Caseta (funciona sin neutro, pero requiere hub ~$80)<br>
+                • Instalar nuevo cable (electricista profesional recomendado)
+            </p>
+        </div>
+    </div>
+</body>
+</html>
